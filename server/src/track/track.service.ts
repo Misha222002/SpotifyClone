@@ -7,6 +7,11 @@ import { Comment, CommentDocument } from './schemas/comment.schema';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { CreateCommentDto } from './dto/create-comment.dto';
 
+export interface getAllProps {
+  tracks: Track[];
+  totalCount: number;
+}
+
 @Injectable()
 export class TrackService {
   constructor(
@@ -31,9 +36,10 @@ export class TrackService {
     }
   }
 
-  async getAll(count = 10, offset = 0): Promise<Track[]> {
-    const tracks = this.trackModel.find().skip(offset).limit(count);
-    return tracks;
+  async getAll(count = 10, offset = 0): Promise<getAllProps> {
+    const tracks = await this.trackModel.find().skip(offset).limit(count);
+    const totalCount = await this.trackModel.countDocuments();
+    return { tracks: tracks, totalCount };
   }
 
   async getOne(id: ObjectId): Promise<Track> {
@@ -42,6 +48,13 @@ export class TrackService {
   }
   async delete(id: ObjectId): Promise<Types.ObjectId> {
     const track = await this.trackModel.findByIdAndDelete(id);
+    this.fileService.removeFile(track.picture);
+    this.fileService.removeFile(track.audio);
+    await Promise.all(
+      track.comments.map((comment) =>
+        this.commentModel.deleteOne({ _id: comment._id }),
+      ),
+    );
     return track._id;
   }
   async addComent(dto: CreateCommentDto): Promise<Comment> {
