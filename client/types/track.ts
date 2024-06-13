@@ -29,10 +29,16 @@ export interface TrackState {
 export enum TrackActionTypes {
   FETCH_TRACKS = "FETCH_TRACKS",
   FETCH_TRACKS_ERROR = "FETCH_TRACKS_ERROR",
+  FIRST_FETCH_TRACKS = "FIRST_FETCH_TRACKS",
 }
 
 interface FetchTracksAction {
   type: TrackActionTypes.FETCH_TRACKS;
+  payload: FetchTracksActionPayload;
+}
+
+interface FetchFirstTracksAction {
+  type: TrackActionTypes.FIRST_FETCH_TRACKS;
   payload: FetchTracksActionPayload;
 }
 
@@ -41,4 +47,7 @@ interface FetchTracksErrorAction {
   payload: string;
 }
 
-export type TrackAction = FetchTracksAction | FetchTracksErrorAction;
+export type TrackAction =
+  | FetchTracksAction
+  | FetchTracksErrorAction
+  | FetchFirstTracksAction;

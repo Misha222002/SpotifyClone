@@ -30,9 +30,16 @@ export default function Player() {
     } else {
       setAudio();
       addListen();
-      play();
     }
   }, [active]);
+
+  useEffect(() => {
+    if (pause) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
+  }, [pause]);
 
   const addListen = async () => {
     if (active) {
@@ -40,26 +47,26 @@ export default function Player() {
     }
   };
 
+
   const setAudio = () => {
     if (active) {
       audio.src = "http://localhost:5000/" + active.audio;
       audio.volume = volume / 100;
       audio.onloadedmetadata = () => {
-        setDurationTrack(Math.ceil(audio.duration));
+        setDurationTrack(Math.ceil(audio?.duration));
       };
       audio.ontimeupdate = () => {
         setCurrentTimeTrack(Math.ceil(audio.currentTime));
       };
+      playTrack();
     }
   };
 
   const play = () => {
     if (pause) {
       playTrack();
-      audio.play();
     } else {
       pauseTrack();
-      audio.pause();
     }
   };
 
@@ -80,7 +87,7 @@ export default function Player() {
   return (
     <div className={styles.player}>
       <IconButton onClick={() => play()}>
-        {!pause ? <Pause /> : <PlayArrow />}
+        {pause ? <PlayArrow /> : <Pause />}
       </IconButton>
       <Grid
         container

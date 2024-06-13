@@ -5,14 +5,16 @@ import TrackItem from "./TrackItem";
 
 interface TrackListProps {
   tracks: ITrack[];
+  albumId?: string;
 }
 
-const TrackList: React.FC<TrackListProps> = ({ tracks }) => {
+const TrackList: React.FC<TrackListProps> = ({ tracks, albumId }) => {
+  if(!tracks) return 
   return (
     <Grid container direction="column">
       <Box p={2}>
         {tracks.map((track) => (
-          <TrackItem key={track._id} track={track} />
+          <TrackItem key={track._id} track={track} albumId={albumId}/>
         ))}
       </Box>
     </Grid>
