@@ -41,7 +41,7 @@ interface SetVolumeAction {
 }
 
 export type PlayerAction =
-   PlayAction
+  | PlayAction
   | PauseAction
   | SetActiveAction
   | SetDurationAction
