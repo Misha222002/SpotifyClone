@@ -37,6 +37,7 @@ export class TrackController {
 
   @Get('/search')
   search(@Query('query') query: string) {
+    console.log(query);
     return this.trackService.search(query);
   }
 

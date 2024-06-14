@@ -70,10 +70,15 @@ export class TrackService {
     track.save();
   }
 
-  async search(query: string): Promise<Track[]> {
-    const tracks = await this.trackModel.find({
-      name: { $regex: new RegExp(query, 'i') },
-    });
-    return tracks;
+  async search(query: string): Promise<getAllProps> {
+    try {
+      const tracks = await this.trackModel.find({
+        name: { $regex: new RegExp(query, 'i') },
+      });
+      const totalCount = tracks.length;
+      return { tracks, totalCount };
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
