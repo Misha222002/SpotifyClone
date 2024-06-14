@@ -20,6 +20,10 @@ export interface FetchTracksActionPayload {
   totalCount: number;
 }
 
+export interface FetchQueryTracks {
+  
+}
+
 export interface TrackState {
   tracks: ITrack[];
   error: string;
